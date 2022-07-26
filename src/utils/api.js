@@ -2,7 +2,8 @@ const express = require("express");
 
 var api = express.Router(); // 路由映射
 
-api.get("/timezone", function(req, res) {
+api.get("/timezone", function (req, res) {
+    console.log(req.path);
     res.send("Sample response for /timezone");
 });
 api.get("/all_timezones", function(req, res) {
