@@ -17,7 +17,7 @@ for (let i = 0, len = setOnline.length; i < len; i++) {
                 return;
             }
             res.setHeader("Content-type", "application/json; charset=utf-8");
-            fs.readFile("./mock/" + name + ".json", function (err, data) {
+            fs.readFile("./mock/json/" + name + ".json", function (err, data) {
                 if (err) throw err;
 
                 res.json(JSON.parse(data));

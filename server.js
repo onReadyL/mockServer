@@ -1,18 +1,13 @@
 const express = require("express"); // 引入express
-const url = require("url"); // 还不知道是啥
-
-const app = express(); // 创建express实例
-const router = express.Router(); // 路由
-
-const Mock = require("mockjs"); // 引入mock
-
-const Random = Mock.Random;
 
 const apis = require("./src/utils/api.js");
+const mock = require("./mock/mock.js");
+
+const app = express(); // 创建express实例
+const port = '3737'; // 端口
 
 app.use("/v1", apis); // 可以用作版本管理
 
-const mock = require("./mock/mock.js");
 const setOnline = mock.setOnline;
 
 /** 解决跨域问题 */
@@ -43,6 +38,6 @@ app.get("/index.html", function (req, res) {
 });
 
 // 监听端口
-app.listen("3737", function () {
-    console.log("localhost:3737/index.html");
+app.listen(port, function () {
+    console.log(`localhost:${port}/index.html`);
 });

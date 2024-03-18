@@ -8,10 +8,9 @@
   "scripts": {
     "dev": "node server.js"
   },
-  "devDependencies": {
-    "express": "^4.17.1"
-  },
+  "devDependencies": {},
   "dependencies": {
+    "express": "^4.18.3",
     "fetch": "^1.1.0",
     "json-function": "^1.8.34",
     "mockjs": "^1.1.0"
