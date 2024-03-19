@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "node server.js"
+    "dev": "nodemon server.js"
   },
   "devDependencies": {},
   "dependencies": {
