@@ -1,6 +1,6 @@
 const express = require("express"); // 引入express
 
-const apis = require("./src/utils/api.js");
+const apis = require("./src/utils/api.js"); // 
 const mock = require("./mock/mock.js");
 
 const app = express(); // 创建express实例
@@ -8,7 +8,7 @@ const port = '3737'; // 端口
 
 app.use("/v1", apis); // 可以用作版本管理
 
-const setOnline = mock.setOnline;
+const setOnline = mock.apis;
 
 /** 解决跨域问题 */
 app.all("*", function (req, res, next) {
@@ -28,12 +28,18 @@ app.all('/secret', (req, res, next) => {
   });
 
 setOnline.forEach(function (item) {
-    app[item.type](item.url, mock[item.name]);
+   const name = item.name;
+   if(Object.prototype.toString.call(name) === '[object Function]'){
+        app[item.type](item.url, mock[name.name]);
+   }else {
+        app[item.type](item.url, mock[name]);
+   }
 });
 
 // 指定html
 app.get("/index.html", function (req, res) {
     const {url, method, header, params, query, body, path, route} = req;
+    console.log(req.path)
     res.sendFile(__dirname + req.path);
 });
 
