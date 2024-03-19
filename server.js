@@ -8,6 +8,9 @@ const port = '3737'; // 端口
 
 app.use("/v1", apis); // 可以用作版本管理
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const setOnline = mock.apis;
 
 /** 解决跨域问题 */
@@ -35,6 +38,16 @@ setOnline.forEach(function (item) {
         app[item.type](item.url, mock[name]);
    }
 });
+
+app.get('/someTest', (req, res) => {
+    console.log(res.app.get('views'));
+    res.send('done')
+})
+
+app.post('/postTest', (req, res) => {
+    console.log(req.body);
+    res.send('postTest')
+})
 
 // 指定html
 app.get("/index.html", function (req, res) {
