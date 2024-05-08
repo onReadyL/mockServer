@@ -11,6 +11,9 @@ app.use("/v1", apis); // 可以用作版本管理
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.set('view engine', 'ejs'); // 指定模板引擎
+app.set('views', __dirname + '/views'); // 设置模板所在目录
+
 const setOnline = mock.apis;
 
 /** 解决跨域问题 */
@@ -55,6 +58,20 @@ app.get("/index.html", function (req, res) {
     console.log(req.path)
     res.sendFile(__dirname + req.path);
 });
+
+app.get("/", (req, res) => {
+    res.render('index', {
+        name: 'Express render with ejs',
+        pageTitle: 'hello ejs'
+    })
+})
+
+app.get("/user/:id", (req, res) => {
+    const { id } = req.params;
+    res.render("user", {
+        id
+    })
+})
 
 // 监听端口
 app.listen(port, function () {
