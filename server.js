@@ -1,18 +1,19 @@
-const express = require("express"); // 引入express
+const express = require("express");
 
-const apis = require("./src/utils/api.js"); // 
 const mock = require("./mock/mock.js");
+const userRouter = require('./router/user.js');
 
 const app = express(); // 创建express实例
 const port = '3737'; // 端口
 
-app.use("/v1", apis); // 可以用作版本管理
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs'); // 指定模板引擎
 app.set('views', __dirname + '/views'); // 设置模板所在目录
+
+app.use('/user', userRouter); // 可以用作版本管理
 
 const setOnline = mock.apis;
 
@@ -42,16 +43,6 @@ setOnline.forEach(function (item) {
    }
 });
 
-app.get('/someTest', (req, res) => {
-    console.log(res.app.get('views'));
-    res.send('done')
-})
-
-app.post('/postTest', (req, res) => {
-    console.log(req.body);
-    res.send('postTest')
-})
-
 // 指定html
 app.get("/index.html", function (req, res) {
     const {url, method, header, params, query, body, path, route} = req;
@@ -69,7 +60,18 @@ app.get("/", (req, res) => {
 app.get("/user/:id", (req, res) => {
     const { id } = req.params;
     res.render("user", {
-        id
+        id,
+        html: `<h1>我是标题</h1>`,
+        users: [
+            {
+                name: '张三',
+                email: 'xxx@qq.com'
+            },
+            {
+                name: '李四',
+                email: 'xxxxxx@qq.com'
+            }
+        ]
     })
 })
 
