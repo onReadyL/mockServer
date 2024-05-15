@@ -1,21 +1,21 @@
 const express = require("express");
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const mock = require("./mock/mock.js");
 const userRouter = require('./router/user.js');
+const setOnline = mock.apis;
 
 const app = express(); // 创建express实例
 const port = '3737'; // 端口
 
+app.set('view engine', 'ejs'); // 指定模板引擎
+app.set('views', path.join(__dirname, 'views')); // 设置模板所在目录
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.set('view engine', 'ejs'); // 指定模板引擎
-app.set('views', __dirname + '/views'); // 设置模板所在目录
-
-app.use('/user', userRouter); // 可以用作版本管理
-
-const setOnline = mock.apis;
+app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 /** 解决跨域问题 */
 app.all("*", function (req, res, next) {
@@ -26,13 +26,7 @@ app.all("*", function (req, res, next) {
     next();
 });
 
-/** 当且仅当访问/secret监听到 */
-app.all('/secret', (req, res, next) => {
-    console.log('访问私有文件 ...');
-    next(); // 控制权传递给下一个处理器
-}, function (res2, req1) {
-    req1.send(res2.path)
-  });
+app.use('/user', userRouter); // 可以用作版本管理
 
 setOnline.forEach(function (item) {
    const name = item.name;
@@ -43,13 +37,6 @@ setOnline.forEach(function (item) {
    }
 });
 
-// 指定html
-app.get("/index.html", function (req, res) {
-    const {url, method, header, params, query, body, path, route} = req;
-    console.log(req.path)
-    res.sendFile(__dirname + req.path);
-});
-
 app.get("/", (req, res) => {
     res.render('index', {
         name: 'Express render with ejs',
@@ -57,25 +44,11 @@ app.get("/", (req, res) => {
     })
 })
 
-app.get("/user/:id", (req, res) => {
-    const { id } = req.params;
-    res.render("user", {
-        id,
-        html: `<h1>我是标题</h1>`,
-        users: [
-            {
-                name: '张三',
-                email: 'xxx@qq.com'
-            },
-            {
-                name: '李四',
-                email: 'xxxxxx@qq.com'
-            }
-        ]
-    })
+app.use((err, req, res, next) => {
+    // 这里可以定义错误状态码
+    res.send('Error:'+ err.message)
 })
-
 // 监听端口
 app.listen(port, function () {
-    console.log(`localhost:${port}/index.html`);
+    console.log(`localhost:${port}`);
 });
