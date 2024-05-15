@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const fileupload = require('express-fileupload');
 
 const mock = require("./mock/mock.js");
 const userRouter = require('./router/user.js');
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
+app.use(fileupload());
 
 /** 解决跨域问题 */
 app.all("*", function (req, res, next) {
