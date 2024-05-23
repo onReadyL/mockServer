@@ -3,8 +3,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const fileupload = require('express-fileupload');
 
-const mock = require("./mock/mock.js");
 const userRouter = require('./router/user.js');
+const indexRouter = require('./router/index.js');
+const mock = require("./mock/mock.js");
 const setOnline = mock.apis;
 
 const app = express(); // 创建express实例
@@ -29,6 +30,7 @@ app.all("*", function (req, res, next) {
 });
 
 app.use('/user', userRouter); // 可以用作版本管理
+app.use('/', indexRouter);
 
 setOnline.forEach(function (item) {
    const name = item.name;
@@ -38,13 +40,6 @@ setOnline.forEach(function (item) {
         app[item.type](item.url, mock[name]);
    }
 });
-
-app.get("/", (req, res) => {
-    res.render('index', {
-        name: 'Express render with ejs',
-        pageTitle: 'hello ejs'
-    })
-})
 
 app.use((err, req, res, next) => {
     // 这里可以定义错误状态码
