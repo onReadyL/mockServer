@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "dev:debug": "set DEBUG=express:* & nodemon server.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

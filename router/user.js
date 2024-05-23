@@ -24,7 +24,7 @@ router.post('/logout', userMiddleware.clearCookie(), (req, res) => {
 })
 
 /** 用户详情接口前缀 /detail/xxxx/xxxx */
-router.use('/detail', userMiddleware.valiteCookie())
+router.use('/detail', [userMiddleware.valiteCookie()])
 router.get("/detail/:id", (req, res) => {
     const { id } = req.params;
     res.render("user", {
